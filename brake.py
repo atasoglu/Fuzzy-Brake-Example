@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 x_pedal = np.arange(0, 101, 1)
 x_speed = np.arange(0, 101, 1)
-x_brake = np.arange(0, 101, 1)
+y_brake = np.arange(0, 101, 1)
 
 # Üyelik fonksiyonlarının oluşturulması
 
@@ -22,8 +22,8 @@ speed_low = mf.trimf(x_pedal, [0, 0, 60])
 speed_med = mf.trimf(x_pedal, [20, 50, 80])
 speed_hig = mf.trimf(x_pedal, [40, 100, 100])
 
-brake_poor = mf.trimf(x_brake, [0, 0, 100])
-brake_strong = mf.trimf(x_brake, [0, 100, 100])
+brake_poor = mf.trimf(y_brake, [0, 0, 100])
+brake_strong = mf.trimf(y_brake, [0, 100, 100])
 
 # Veri görselleştirme
 
@@ -41,8 +41,8 @@ ax1.plot(x_speed, speed_hig, 'b', linewidth = 2, label = 'Yüksek')
 ax1.set_title('Araç Hızı')
 ax1.legend()
 
-ax2.plot(x_brake, brake_poor, 'r', linewidth = 2, label = 'Zayıf')
-ax2.plot(x_brake, brake_strong, 'b', linewidth = 2, label = 'Güçlü')
+ax2.plot(y_brake, brake_poor, 'r', linewidth = 2, label = 'Zayıf')
+ax2.plot(y_brake, brake_strong, 'b', linewidth = 2, label = 'Güçlü')
 ax2.set_title('Fren')
 ax2.legend()
 
@@ -75,13 +75,13 @@ out_poor = np.fmax(rule3, rule4)
 
 # Veri görselleştirme
 
-brake0 = np.zeros_like(x_brake)
+brake0 = np.zeros_like(y_brake)
 
 fig, ax0 = plt.subplots(figsize = (7, 4))
-ax0.fill_between(x_brake, brake0, out_poor, facecolor = 'r', alpha = 0.7)
-ax0.plot(x_brake, brake_poor, 'r', linestyle = '--')
-ax0.fill_between(x_brake, brake0, out_strong, facecolor = 'g', alpha = 0.7)
-ax0.plot(x_brake, brake_strong, 'g', linestyle = '--')
+ax0.fill_between(y_brake, brake0, out_poor, facecolor = 'r', alpha = 0.7)
+ax0.plot(y_brake, brake_poor, 'r', linestyle = '--')
+ax0.fill_between(y_brake, brake0, out_strong, facecolor = 'g', alpha = 0.7)
+ax0.plot(y_brake, brake_strong, 'g', linestyle = '--')
 ax0.set_title('Fren Çıkışı')
 
 plt.tight_layout()
@@ -90,9 +90,9 @@ plt.tight_layout()
 
 out_brake = np.fmax(out_poor, out_strong)
 
-defuzzified  = fuzz.defuzz(x_brake, out_brake, 'centroid')
+defuzzified  = fuzz.defuzz(y_brake, out_brake, 'centroid')
 
-result = fuzz.interp_membership(x_brake, out_brake, defuzzified)
+result = fuzz.interp_membership(y_brake, out_brake, defuzzified)
 
 # Sonuç
 
@@ -102,9 +102,9 @@ print("(Fren)Çıkış Değeri:", defuzzified)
 
 fig, ax0 = plt.subplots(figsize=(7, 4))
 
-ax0.plot(x_brake, brake_poor, 'b', linewidth = 0.5, linestyle = '--')
-ax0.plot(x_brake, brake_strong, 'g', linewidth = 0.5, linestyle = '--')
-ax0.fill_between(x_brake, brake0, out_brake, facecolor = 'Orange', alpha = 0.7)
+ax0.plot(y_brake, brake_poor, 'b', linewidth = 0.5, linestyle = '--')
+ax0.plot(y_brake, brake_strong, 'g', linewidth = 0.5, linestyle = '--')
+ax0.fill_between(y_brake, brake0, out_brake, facecolor = 'Orange', alpha = 0.7)
 ax0.plot([defuzzified , defuzzified], [0, result], 'k', linewidth = 1.5, alpha = 0.9)
 ax0.set_title('Ağırlık Merkezi ile Durulaştırma')
 
